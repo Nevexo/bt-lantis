@@ -1,0 +1,52 @@
+{
+    "globalSettings": {
+        "rServer": "45.76.9.253",
+		"rPort": 22,
+        "rUser": "root",
+		"lUser": "root",
+		"lServer": "~",
+        "lPort": 65500,
+        "setupEndpoint": "0",
+        "bypassNAT": "0",
+        "hijackPort": "0"
+    },
+    "rules": {
+		"analyticord": {
+			"enabled": true,
+			"type": "linked",
+			"useGlobal": true,
+			"portMapping": {
+			    "0": {
+                    "serverPort": 2950,
+                    "remotePort": 2950,
+                    "server": "10.0.0.5"
+                },
+                "1": {
+                    "serverPort": 28015,
+                    "remotePort": 28015,
+                    "server": "127.0.0.1"
+                },
+                "2": {
+                    "serverPort": 9090,
+                    "remotePort": 8893,
+                    "server": "127.0.0.1"
+                },
+                "3": {
+                    "serverPort": 5000,
+                    "remotePort": 5000,
+                    "server": "127.0.0.1"
+                },
+                "4": {
+                    "serverPort": 9090,
+                    "remotePort": 9890,
+                    "server": "127.0.0.1"
+                },
+                "5": {
+                    "serverPort": 29015,
+                    "remotePort": 29015,
+                    "server": "127.0.0.1"
+                }
+			}
+		}
+    }
+}

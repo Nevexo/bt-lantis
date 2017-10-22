@@ -1,0 +1,47 @@
+{
+    "globalSettings": {
+        "rServer": "8.8.8.8",
+		"rPort": 22,
+        "rUser": "root",
+		"lUser": "root",
+		"lServer": "~",
+        "lPort": 65700,
+        "setupEndpoint": "0",
+        "bypassNAT": "0",
+        "hijackPort": "0"
+    },
+    "rules": {
+		"test-1": {
+			"enabled": true,
+			"type": "single",
+			"useGlobal": true,
+			"portMapping": {
+                "serverPort": 7676,
+                "remotePort": 5555,
+                "server": "127.0.0.1"
+			}
+        },
+        "test-2": {
+			"enabled": true,
+			"type": "linked",
+			"useGlobal": true,
+			"portMapping": {
+			    "0": {
+                    "serverPort": 25,
+                    "remotePort": 2950,
+                    "server": "10.0.0.5"
+                },
+                "1": {
+                    "serverPort": 3389,
+                    "remotePort": 3388,
+                    "server": "10.30.1.2"
+                },
+                "2": {
+                    "serverPort": 9090,
+                    "remotePort": 8893,
+                    "server": "127.0.0.1"
+                }
+            }
+        }
+    }
+}
