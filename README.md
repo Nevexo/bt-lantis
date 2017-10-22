@@ -91,7 +91,7 @@ Making a linked connection is similar, but you can have more than one portMappin
       }
 }
 ```
-You can rename 0-2 to anything you want, these names are not placed into LANTIS as LANTIS doesn't support portMapping names. But for your future use, call them something that tells you what they do.
+
 ## Deploying your changes
 ### Argument -d will be able to do this automatically in the future automatically.
 ```
