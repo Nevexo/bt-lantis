@@ -12,6 +12,8 @@ LANTIS itself has a horrid config file & guide, so this is my way of fixing it.
 You can run BT-LANTIS from any platform, but LANTIS only works on a bash bashed system.
 Download a version of LANTIS [here](code.acr.moe/kazari/LANTIS/)
 
+![Image](https://i.imgur.com/FFk2Ee6.png)
+
 ## Getting Started with BT-LANTIS config
 
 Make a file called 'config.json' - Or what ever you want to call it, that's what I'll be calling it from now on.
