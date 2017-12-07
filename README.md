@@ -57,39 +57,39 @@ A single connections means it's one tunnel for 1 service/port, linked uses one t
 Here's how to make a single connection:
 ```json
 "test": {
-			"enabled": true <- If set to false, LANTIS won't run these.,
-			"type": "single", 
-			"useGlobal": true,
-			"portMapping": {
-                "serverPort": 22 <- This is the port on the server that you want to be public,
-                "remotePort": 2950 <- This is the port that you want '22' to be published to.,
-                "server": "10.0.0.5" <- This is where that service is running (can be 127.0.0.1)
-			}
+	"enabled": true <- If set to false, LANTIS won't run these.,
+	"type": "single", 
+	"useGlobal": true,
+	"portMapping": {
+		"serverPort": 22 <- This is the port on the server that you want to be public,
+		"remotePort": 2950 <- This is the port that you want '22' to be published to.,
+		"server": "10.0.0.5" <- This is where that service is running (can be 127.0.0.1)
+	}
 }
 ```
 Making a linked connection is similar, but you can have more than one portMapping:
 (DO NOT PROVIDE JUST 1 SERVICE! THAT COULD CAUSE LANTIS TO DIE!)
 ```
 "test-2": {
-			"enabled": true,
-			"type": "linked",
-			"useGlobal": true,
-			"portMapping": {
-			    "0": {
-              "serverPort": 2950,
-              "remotePort": 2950,
-              "server": "10.0.0.5"
-          },
-          "1": {
-              "serverPort": 28015,
-              "remotePort": 28015,
-              "server": "127.0.0.1"
-          },
-          "2": {
-              "serverPort": 9090,
-              "remotePort": 8893,
-              "server": "127.0.0.1"
-          }
+	"enabled": true,
+	"type": "linked",
+	"useGlobal": true,
+	"portMapping": {
+		"0": {
+			"serverPort": 2950,
+			"remotePort": 2950,
+			"server": "10.0.0.5"
+          	},
+		"1": {
+		    "serverPort": 28015,
+		    "remotePort": 28015,
+		    "server": "127.0.0.1"
+		},
+		"2": {
+		    "serverPort": 9090,
+		    "remotePort": 8893,
+		    "server": "127.0.0.1"
+		}
       }
 }
 ```
