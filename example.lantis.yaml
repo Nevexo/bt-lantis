@@ -1,0 +1,54 @@
+global:
+  remote:
+    # Server in the public cloud
+    host: "172.16.2.4"
+    port: 22
+    user: "root"
+  local:
+    # The achine LANTIS will run from
+    host: auto
+    user: "root"
+    port: 5000 # Not used if bypassNAT is enabled
+  options:
+    # Settings for LANTIS
+    setup_mode: no
+    bypass_nat: no
+    hijack_port: no
+
+services:
+  # Services can either run locally (127.0.0.1)
+  # Or on a remote machine, on the same LAN as the LANTIS Router.
+  web:
+    local_port: 80
+    remote_port: 8080
+    local_address: 127.0.0.1
+  game:
+    local_port: 25565
+    remote_port: 25565
+    local_address: 172.16.1.2
+  gitlab:
+    local_port: 80
+    remote_port: 8081
+    local_address: 172.16.2.5
+
+rules:
+  # Rules tell LANTIS which services to use and how to use them
+  # use_global_remote will use the settings at the top.
+  game-server:
+    enable: yes
+    mode: single
+    service: game
+    use_global_remote: yes
+  
+  web-services:
+    enable: yes
+    mode: shared
+    use_global_remote: no
+    remote:
+      server: "172.16.2.99"
+      port: 22
+      user: "root"
+    services:
+      - web
+      - gitlab
+      
