@@ -98,6 +98,10 @@ Services can be re-used in different connections to remotes, but can not be used
 - local_address
   This is the IP address of the server with that service (it can be localhost)
 
+- listen_interface
+  This decides if the system should listen on all interfaces or loopback only. Set to all or loopback accordingly
+  If you don't know what this means, leave it as 'all'
+
 ### Rules
 
 These work in the same way that dst-nat (port forward) rules work on your router/firewall. 

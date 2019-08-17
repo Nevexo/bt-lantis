@@ -1,12 +1,12 @@
 global:
   remote:
     # Server in the public cloud
-    host: "172.16.2.4"
+    server: "172.16.2.4"
     port: 22
     user: "root"
   local:
     # The achine LANTIS will run from
-    host: auto
+    server: auto
     user: "root"
     port: 5000 # Not used if bypassNAT is enabled
   options:
@@ -22,14 +22,19 @@ services:
     local_port: 80
     remote_port: 8080
     local_address: 127.0.0.1
+    listen_interface: all
+
   game:
     local_port: 25565
     remote_port: 25565
     local_address: 172.16.1.2
+    listen_interface: all
+
   gitlab:
     local_port: 80
     remote_port: 8081
     local_address: 172.16.2.5
+    listen_interface: all 
 
 rules:
   # Rules tell LANTIS which services to use and how to use them
@@ -51,4 +56,10 @@ rules:
     services:
       - web
       - gitlab
-      
+      - game
+            
+  video-server:
+    enable: no
+    mode: single
+    service: gitlab
+    use_global_remote: yes
