@@ -56,8 +56,7 @@ rules:
     services:
       - web
       - gitlab
-      - game
-            
+          
   video-server:
     enable: no
     mode: single

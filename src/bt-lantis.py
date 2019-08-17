@@ -46,6 +46,7 @@ def runConversion():
     else:
         verbose(f"[Main] Found {len(services)} services.")
 
+    rulesString = ""
     for rule in rules:
         verbose(f"[Main] Process Rule: {rule}")
 
@@ -57,9 +58,24 @@ def runConversion():
             verbose(f"[Main] [{rule}] Sanity checks passed.")
 
         # Generate the rule
+        if bt_lantis.getMode(rule) == 'single':
+            ruleString = bt_lantis.createRuleSingle(rule, args.ignore_disabled)
+        else:
+            ruleString = bt_lantis.createRuleShared(rule, args.ignore_disabled)
+        
+        if ruleString != False:
+            rulesString += ruleString + "\n"
 
-        print(bt_lantis.createRuleSingle(rule, args.ignore_disabled))
-        print(bt_lantis.createRuleShared(rule, args.ignore_disabled))
+    rulesString = bt_lantis.addComments() + rulesString[:-1]
+    print(f"Rule generation complete, writing to file: {outputFileLocation}")    
+
+    if outputFileLocation == 'shell':
+        print(rulesString)
+    else:
+        with open(outputFileLocation, "w+") as f:
+            f.write(rulesString)
+    
+    print("-- bt-lantis complete! -- ")
 
 
 if __name__ == "__main__":

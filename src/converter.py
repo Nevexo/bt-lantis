@@ -8,7 +8,6 @@ class Converter:
     # Converter used by bt-lantis
     def __init__(self, verboseSubroutine, version, name, repo, LANTISRepo):
         self.verbose = verboseSubroutine
-        self.output = ""
         self.version = version
         self.name = name
         self.repo = repo
@@ -27,14 +26,19 @@ class Converter:
             return False
 
     def addComments(self):
-        self.output += f"# {self.name} ({self.version}) Generated Configuration File"
-        self.output += f"\n# Created at {datetime.datetime.now()} by {getpass.getuser()}" 
-        self.output += f"\n# For more information about {self.name}, see {self.repo}"  
-        self.output += f"\n# For more information about LANTIS, see {self.LANTISRepo}" 
-        self.output += f"\n# Keep hold of your YAML file, LANTIS files can not (yet) be reversed into YAML.\n\n# ##START LANTIS CONFIG##\n"
+        string = ""
+        string += f"# {self.name} ({self.version}) Generated Configuration File"
+        string += f"\n# Created at {datetime.datetime.now()} by {getpass.getuser()}" 
+        string += f"\n# For more information about {self.name}, see {self.repo}"  
+        string += f"\n# For more information about LANTIS, see {self.LANTISRepo}" 
+        string += f"\n# Keep hold of your YAML file, LANTIS files can not (yet) be reversed into YAML.\n\n# ##START LANTIS CONFIG##\n"
+        return string
 
     def getServices(self):
         return self.yaml["services"]
+
+    def getMode(self, rule):
+        return self.yaml["rules"][rule]["mode"]
 
     def getRules(self):
         return self.yaml["rules"]
@@ -162,7 +166,7 @@ class Converter:
             ruleStr += '0;'
             
         if ignoreDisabled and rule["enable"] == False:
-            return ""
+            return False
         else:
             return ruleStr
 
@@ -253,10 +257,11 @@ class Converter:
             else:
                 ruleStr += '0;'
             
-            ruleStr += '\n'
+            if pointer != endPointer:
+                ruleStr += '\n'
             pointer += 1
 
         if ignoreDisabled and rule["enable"] == False:
-            return ""
+            return False
         else:
             return ruleStr
