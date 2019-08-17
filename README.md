@@ -113,6 +113,10 @@ These work in the same way that dst-nat (port forward) rules work on your router
   This sets how the rule should be created, if set to single, the 'service' directive should be added, multiple services are not supported in this mode.
   If set to 'shared', the 'services' directive must be used, even if you're only using a single service. See the next section for more information on this feature.
 
+- description
+  This is an optional flag used for better documentation. You may enter any string in here and it'll be placed into the LANTIS configuration file as a comment.
+  If this flag is not passed, the comment will be created with just the name of the rule.
+
 - use_global_remote
   This tells the rule wether it should use the global remote settings set at the top of the file, or use ones set within the rule. It uses the same settings (see the example)
 
