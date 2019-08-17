@@ -107,10 +107,9 @@ class Converter:
             return False
 
         # Add 'description'
+        ruleStr += f'# ----- [ {ruleName} (Single) ] -----\n'
         if 'description' in rule:
-            ruleStr += f'# LANTIS Rule - {ruleName}: {rule["description"]}\n'
-        else:
-            ruleStr += f'# LANTIS Rule - {ruleName}\n'
+            ruleStr += f'# Description: {rule["description"]}\n'
 
         # Enable/Disable rule
         if rule["enable"]:
@@ -127,7 +126,12 @@ class Converter:
             ruleStr += gRemote["server"] + ";" # Remote Hostname/IP Address
             ruleStr += str(gRemote["port"]) + ";"   # Remote SSH Port
             ruleStr += gRemote["user"] + ";"   # Remote SSH Username
-        
+        else:
+            # Use specific settings
+            ruleStr += rule['remote']['server'] + ";"
+            ruleStr += str(rule['remote']['port']) + ";"
+            ruleStr += rule['remote']['user'] + ";"
+            
         # 'Local' LANTIS Server IP / Auto Discover
         if gLocal["server"] == "auto":
             ruleStr += '~;'
@@ -170,7 +174,10 @@ class Converter:
             ruleStr += '1;'
         else:
             ruleStr += '0;'
-            
+        
+        # Rule Seperation
+        #ruleStr += '\n# ------ [End of Rule] ------'
+
         if ignoreDisabled and rule["enable"] == False:
             return False
         else:
@@ -191,10 +198,9 @@ class Converter:
             return False
 
         # Add 'description'
+        ruleStr += f'# ----- [ {ruleName} (Shared) ] -----\n'
         if 'description' in rule:
-            ruleStr += f'# LANTIS Rule - {ruleName}: {rule["description"]}\n'
-        else:
-            ruleStr += f'# LANTIS Rule - {ruleName}\n'
+            ruleStr += f'# Description: {rule["description"]}\n'
 
         # Enable/Disable rule
         if rule["enable"]:
@@ -214,7 +220,12 @@ class Converter:
             ruleStr += gRemote["server"] + ";" # Remote Hostname/IP Address
             ruleStr += str(gRemote["port"]) + ";"   # Remote SSH Port
             ruleStr += gRemote["user"] + ";"   # Remote SSH Username
-        
+        else:
+            # Use specific settings
+            ruleStr += rule['remote']['server'] + ";"
+            ruleStr += str(rule['remote']['port']) + ";"
+            ruleStr += rule['remote']['user'] + ";"
+
         # 'Local' LANTIS Server IP / Auto Discover
         if gLocal["server"] == "auto":
             ruleStr += '~;'
@@ -272,6 +283,9 @@ class Converter:
             if pointer != endPointer:
                 ruleStr += '\n'
             pointer += 1
+
+        # Rule Seperator
+        #ruleStr += '\n# ------ [End of Rule] ------'
 
         if ignoreDisabled and rule["enable"] == False:
             return False
