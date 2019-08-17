@@ -131,7 +131,7 @@ class Converter:
             ruleStr += rule['remote']['server'] + ";"
             ruleStr += str(rule['remote']['port']) + ";"
             ruleStr += rule['remote']['user'] + ";"
-            
+
         # 'Local' LANTIS Server IP / Auto Discover
         if gLocal["server"] == "auto":
             ruleStr += '~;'
@@ -181,7 +181,7 @@ class Converter:
         if ignoreDisabled and rule["enable"] == False:
             return False
         else:
-            return ruleStr
+            return ruleStr + "\n"
 
     def createRuleShared(self, ruleName, ignoreDisabled):
         # Create the rule in LANTIS style (SINGLE)
@@ -290,4 +290,4 @@ class Converter:
         if ignoreDisabled and rule["enable"] == False:
             return False
         else:
-            return ruleStr
+            return ruleStr + "\n"
