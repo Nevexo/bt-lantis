@@ -64,4 +64,3 @@ rules:
     mode: single
     service: gitlab
     use_global_remote: yes
-    description: The old video server

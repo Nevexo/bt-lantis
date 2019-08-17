@@ -109,6 +109,8 @@ class Converter:
         # Add 'description'
         if 'description' in rule:
             ruleStr += f'# LANTIS Rule - {ruleName}: {rule["description"]}\n'
+        else:
+            ruleStr += f'# LANTIS Rule - {ruleName}\n'
 
         # Enable/Disable rule
         if rule["enable"]:
@@ -191,6 +193,8 @@ class Converter:
         # Add 'description'
         if 'description' in rule:
             ruleStr += f'# LANTIS Rule - {ruleName}: {rule["description"]}\n'
+        else:
+            ruleStr += f'# LANTIS Rule - {ruleName}\n'
 
         # Enable/Disable rule
         if rule["enable"]:
