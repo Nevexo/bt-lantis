@@ -12,7 +12,7 @@ import os        # Used for file management
 # Setup globals
 btlVers = "2.0"
 configFileLocation = "lantis.yaml"
-outputFileLocation = "ports.lantis.conf"
+outputFileLocation = "ports.lantis.csv"
 verboseOutput = False
 
 # Setup global functions

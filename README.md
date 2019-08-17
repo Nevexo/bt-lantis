@@ -45,7 +45,7 @@ SSH tunneling is a feature built into OpenSSH that allows us to send non-SSH dat
 
 bt-LANTIS is an abstraction layer for 'ports.lantis.csv' - LANTIS' usual configuration file.
 
-It uses YAML (see example.lantis.yaml) and simple English options.
+It uses YAML (see src/example.lantis.yaml) and simple English options.
 
 Below are some explanations of the sections.
 
@@ -69,6 +69,9 @@ Port, as it's name suggests, is the port to connect to. This is the port that yo
 This is the server the LANTIS router will be running on. It's usually within a private network that you want to forward ports from.
 
 'host' is the IP address of the machine you're using. This IP address must be accessible by the remote server (unless you're using bypass_nat) - you can enter auto in this field to have LANTIS automatically detect your IP address.
+
+Please note: LANTIS can technically support using a different local server for the watchdog. This feature is complicated to implement, so bas not been implemented
+into bt-lantis. If there is demand for it, it can be added in the future.
 
 #### Options
 
@@ -133,3 +136,20 @@ LANTIS has support for 'linked' or as I call them 'shared' connections.
 Connection sharing is great for low-bandwidth services such as web servers as it will share a single SSH tunnel for multiple services, reducing the route table size and load on the server.
 
 Single connections mean only one service can be sent down a tunnel, this is recommended if the service you're using uses a lot of bandwidth, such as a game server.
+
+## Running bt-lantis
+
+BT-LANTIS requires Python3 to be installed on the host machine, no other modules are required.
+
+If you're using 'lantis.yaml' as your config file, you can just run `python3 bt-lantis.py` and ports.lantis.csv will be dropped into the same directory.
+
+### Command line arguments
+
+  -c - Specify a different config file | -c <yaml-file>
+  
+  -o - Specify a different output file, set to 'shell' to print output to shell. | -c <shell/yaml-file>
+
+  -v - Enable verbose output, useful for debugging
+
+  --ignore-disabled - Do not write disabled rules into the config file, useful for shared connections.
+
