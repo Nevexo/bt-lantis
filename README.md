@@ -1,109 +1,155 @@
-# Better LANTIS & LANTISWeb
+# bt-lantis
 
-### Please note: LANTIS Web isn't complete. More information coming soon.
+Welcome to the BetterLANTIS GitHub Repository
 
-A better configuration wrapper for LANTIS Router 2.
+## LANTIS
 
-LANTIS is a free, opensource bash based watchdog for SSH tunnels. 
-It allows you to use cheap, throwaway servers from any hosting company to hide any IP.
+Lain Anonymous NetworkIng System (LANTIS) is a reverse port forwarding server & SSH tunnel daemon designed
+for use with throw-away public cloud servers.
 
-LANTIS itself has a horrid config file & guide, so this is my way of fixing it.
+LANTIS can be used to port forward services on a private network to a public host with SSH tunnels, with it's
+bypass NAT system turned on, it can operate without needing to open ports on the private network.
 
-You can run BT-LANTIS from any platform, but LANTIS only works on a bash bashed system.
-Download a version of LANTIS [here](code.acr.moe/kazari/LANTIS/)
+The remote (throw-away) server only needs SSH exposing to the internet on any port. SSH keys are used for authentication.
+Root access may be required if you wish to use [Priviliged ports](https://www.w3.org/Daemon/User/Installation/PrivilegedPorts.html)
 
-![Image](https://i.imgur.com/FFk2Ee6.png)
+[Get LANTIS](https://code.acr.moe/kazari/LANTIS)
 
-## Getting Started with BT-LANTIS config
+## The Problem
 
-Make a file called 'config.json' - Or what ever you want to call it, that's what I'll be calling it from now on.
-Or rename example.config.json to config.json
+LANTIS is an extremely powerful tool, but unfortunately it's configuration file can be daunting to someone 
+with no prior experience. This project hopes to configuring LANTIS easier and faster.
 
-Now edit that file in any editor. You have a few choices:
+## Terminology
 
-1) Use global
-2) Don't use global.
+For those unfamiliar with networking and LANTIS, the following section should give
+some guidance on the terminology used throughout this document and the
+configuration files.
 
-Using a global configuration allows you to add new port maps without repeating the IP & login information for every one.
+### NAT - Network Address Translation
 
-```json
+NAT is a technology that was created to help deal with the shortage of IPv4
+addresses available. Every home internet connection uses NAT, this means your
+house is assigned a single IP address (a 'public' address) and your router then 
+gives out private IP addresses. When your computer wants to get a resource from the internet, it contacts your gateway (aka your router) which takes the request, removes your private IP and places your public IP in its place. Once the server sends a response, your router swaps the public IP back to your private IP and sends it onto the LAN. This is called masquerading.
 
-{
-    "globalSettings": {
-      "rServer": "IP of your throwaway server",
-      "rPort": SSH Port for your throwaway server.,
-      "rUser": "username on your remote server (recommended root)",
-      "lUser": "Username of the system running LANTIS (recommended root)",
-      "lServer": "IP of the LANTIS server on the internet (~ for dynamic)",
-      "lPort": SSH port to get back to this machine,
-      "setupEndpoint": "Setup remote server (0 / 1) (SEE LANTIS DOCS!!)",
-      "bypassNAT": "Bypass NAT (0 /1) (SEE LANTIS DOCS!!)",
-      "hijackPort": "Hijack the remote port (See lantis docs)"
-    }
-}
-```
-After setting these, if you want a port mapping to use these settings, just put
-```
-"useGlobal": true
-```
-## Configuring port maps
+When you port forward something you're telling your router that whenever it sees traffic coming in from the internet to that port, it should send it to this specific host.
 
-You again have 2 choices
+### SSH Tunneling
 
-1) Single connection
-2) Linked connection
+SSH tunneling is a feature built into OpenSSH that allows us to send non-SSH data (such as HTTP) down an SSH connection. 
 
-A single connections means it's one tunnel for 1 service/port, linked uses one tunnel for multiple ports/services.
-Here's how to make a single connection:
-```json
-"test": {
-	"enabled": true <- If set to false, LANTIS won't run these.,
-	"type": "single", 
-	"useGlobal": true,
-	"portMapping": {
-		"serverPort": 22 <- This is the port on the server that you want to be public,
-		"remotePort": 2950 <- This is the port that you want '22' to be published to.,
-		"server": "10.0.0.5" <- This is where that service is running (can be 127.0.0.1)
-	}
-}
-```
-Making a linked connection is similar, but you can have more than one portMapping:
-(DO NOT PROVIDE JUST 1 SERVICE! THAT COULD CAUSE LANTIS TO DIE!)
-```
-"test-2": {
-	"enabled": true,
-	"type": "linked",
-	"useGlobal": true,
-	"portMapping": {
-		"0": {
-			"serverPort": 2950,
-			"remotePort": 2950,
-			"server": "10.0.0.5"
-          	},
-		"1": {
-		    "serverPort": 28015,
-		    "remotePort": 28015,
-		    "server": "127.0.0.1"
-		},
-		"2": {
-		    "serverPort": 9090,
-		    "remotePort": 8893,
-		    "server": "127.0.0.1"
-		}
-      }
-}
-```
+[Learn more about SSH Tunneling](https://www.youtube.com/watch?v=bKZb75TaRyI)
 
-## Deploying your changes
-### Argument -d will be able to do this automatically in the future automatically.
-```
-btl -c config.json ports.lantis.conf
-```
-```
-bash lantis.bash -L
-```
-### Setting up LANTIS
-Clone code.acr.moe/kazari/LANTIS/
-and type 'bash lantis.bash -Z' & follow the instructions for setting up your key.
+## Configuration
 
-```
+bt-LANTIS is an abstraction layer for 'ports.lantis.csv' - LANTIS' usual configuration file.
+
+It uses YAML (see src/example.lantis.yaml) and simple English options.
+
+Below are some explanations of the sections.
+
+### Global Settings
+
+LANTIS has some settings of it's own and allows you to define the remote/local
+settings once and use them throughout the rest of the config. 
+
+#### Remote
+
+This is the 'throw-away' or cloud-hosted server that you want the ports to be exposed on. This should be a server that you don't mind sharing the IP address for, as all of your users will connect to it, then be sent back to your private server.
+
+The "host" must be set to the IP address LANTIS should use to connect to the server, note you must have installed the LANTIS key into authorized_keys for the user you wish to use.
+
+The "user" field will likely just be 'root' as LANTIS doesn't support privilege escalation and if you want to use a port below 1024, you must be root.
+
+Port, as it's name suggests, is the port to connect to. This is the port that your SSH server is listening on (default 22)
+
+#### Local
+
+This is the server the LANTIS router will be running on. It's usually within a private network that you want to forward ports from.
+
+'host' is the IP address of the machine you're using. This IP address must be accessible by the remote server (unless you're using bypass_nat) - you can enter auto in this field to have LANTIS automatically detect your IP address.
+
+Please note: LANTIS can technically support using a different local server for the watchdog. This feature is complicated to implement, so bas not been implemented
+into bt-lantis. If there is demand for it, it can be added in the future.
+
+#### Options
+
+LANTIS has a collection of it's own options.
+
+- setup_mode
+  When you first run LANTIS, it needs to SSH into the remote server and deploy the required keys. Write your config, set this to yes and run the connection, once you've verified the connection started correctly, turn this back off.
+
+- bypass_nat
+  One of the most important features of LANTIS is it's ability to bypass NAT, if this is set to true, you don't need to open a port on your private network. A connection will be opened to your remote server then the remote server will use that connection to connect to your local machine again. This adds complication and overhead, so only use it if you have no way of port-forwarding the server any other way.
+
+- hijack_port 
+  If there is a process on the remote server using the port that LANTIS wants to use, it will kill it. Be careful using this during configuration testing, especially under production conditions.
+
+### Services
+
+This is a feature specific to bt-lantis, it splits services and rules from each other, the services are ports that you want to forward, and the rules are how you will forward them.
+
+Services can be re-used in different connections to remotes, but can not be used on the same remote (as the port will already be allocated)
+
+- local_port
+  This is the port the service is using on the machine it's running on.
+
+- remote_port
+  This is the port you want the service to be visible by on the remote server
+
+- local_address
+  This is the IP address of the server with that service (it can be localhost)
+
+- listen_interface
+  This decides if the system should listen on all interfaces or loopback only. Set to all or loopback accordingly
+  If you don't know what this means, leave it as 'all'
+
+### Rules
+
+These work in the same way that dst-nat (port forward) rules work on your router/firewall. 
+
+- enable
+  Rules that are disabled will still be placed into your LANTIS file, but in the disabled state, meaning when you run the bring-all-up LANTIS command, the rule will remain down.
+
+- mode
+  This sets how the rule should be created, if set to single, the 'service' directive should be added, multiple services are not supported in this mode.
+  If set to 'shared', the 'services' directive must be used, even if you're only using a single service. See the next section for more information on this feature.
+
+- description
+  This is an optional flag used for better documentation. You may enter any string in here and it'll be placed into the LANTIS configuration file as a comment.
+  If this flag is not passed, the comment will be created with just the name of the rule.
+
+- use_global_remote
+  This tells the rule wether it should use the global remote settings set at the top of the file, or use ones set within the rule. It uses the same settings (see the example)
+
+- service
+  If using 'single' mode, this directive sets which service (from the services section) should be used
+
+- services
+  If using the 'shared' mode, this directive sets which services (from the services section) should be used
+
+### Single vs Shared Connections
+
+LANTIS has support for 'linked' or as I call them 'shared' connections.
+
+Connection sharing is great for low-bandwidth services such as web servers as it will share a single SSH tunnel for multiple services, reducing the route table size and load on the server.
+
+Single connections mean only one service can be sent down a tunnel, this is recommended if the service you're using uses a lot of bandwidth, such as a game server.
+
+## Running bt-lantis
+
+BT-LANTIS requires Python3 to be installed on the host machine, no other modules are required.
+
+If you're using 'lantis.yaml' as your config file, you can just run `python3 bt-lantis.py` and ports.lantis.csv will be dropped into the same directory.
+
+### Command line arguments
+
+  -c - Specify a different config file | -c <yaml-file>
+  
+  -o - Specify a different output file, set to 'shell' to print output to shell. | -c <shell/yaml-file>
+
+  -v - Enable verbose output, useful for debugging
+
+  --ignore-disabled - Do not write disabled rules into the config file, useful for shared connections.
+
