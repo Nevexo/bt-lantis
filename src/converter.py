@@ -31,7 +31,7 @@ class Converter:
         string += f"\n# Created at {datetime.datetime.now()} by {getpass.getuser()}" 
         string += f"\n# For more information about {self.name}, see {self.repo}"  
         string += f"\n# For more information about LANTIS, see {self.LANTISRepo}" 
-        string += f"\n# Keep hold of your YAML file, LANTIS files can not (yet) be reversed into YAML.\n\n# ##START LANTIS CONFIG##\n"
+        string += f"\n# Keep hold of your YAML file, LANTIS files can not (yet) be reversed into YAML.\n# ##START LANTIS CONFIG##\n"
         return string
 
     def getServices(self):
