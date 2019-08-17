@@ -31,7 +31,7 @@ class Converter:
         string += f"\n# Created at {datetime.datetime.now()} by {getpass.getuser()}" 
         string += f"\n# For more information about {self.name}, see {self.repo}"  
         string += f"\n# For more information about LANTIS, see {self.LANTISRepo}" 
-        string += f"\n# Keep hold of your YAML file, LANTIS files can not (yet) be reversed into YAML.\n# ##START LANTIS CONFIG##\n"
+        string += f"\n# Keep hold of your YAML file, LANTIS files can not (yet) be reversed into YAML.\n# --------------\n#\n"
         return string
 
     def getServices(self):
@@ -105,6 +105,10 @@ class Converter:
         # Sanity check (mainly for debugging)
         if rule["mode"] != "single":
             return False
+
+        # Add 'description'
+        if 'description' in rule:
+            ruleStr += f'# LANTIS Rule - {ruleName}: {rule["description"]}\n'
 
         # Enable/Disable rule
         if rule["enable"]:
@@ -183,6 +187,10 @@ class Converter:
         # Sanity check (mainly for debugging)
         if rule["mode"] != "shared":
             return False
+
+        # Add 'description'
+        if 'description' in rule:
+            ruleStr += f'# LANTIS Rule - {ruleName}: {rule["description"]}\n'
 
         # Enable/Disable rule
         if rule["enable"]:

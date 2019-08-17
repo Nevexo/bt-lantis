@@ -44,11 +44,13 @@ rules:
     mode: single
     service: game
     use_global_remote: yes
+    description: My amazing Minecraft server!
   
   web-services:
     enable: yes
     mode: shared
     use_global_remote: no
+    description: A simple website and GitLab instance
     remote:
       server: "172.16.2.99"
       port: 22
@@ -62,3 +64,4 @@ rules:
     mode: single
     service: gitlab
     use_global_remote: yes
+    description: The old video server
