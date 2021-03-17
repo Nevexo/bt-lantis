@@ -167,7 +167,7 @@ class Converter:
         ruleStr += services[rule['service']]['local_address'] + ";"
 
         # Add local (service) port
-        ruleStr += str(services[rule['service']]['remote_port']) + ";"
+        ruleStr += str(services[rule['service']]['local_port']) + ";"
 
         # Listen to all interfaces or loopback
         if services[rule['service']]['listen_interface'] == 'all':
